@@ -1,0 +1,109 @@
+openapi: 3.0.0
+info:
+  version: "1.0.0"
+  title: Digital line REST API
+
+# Paths supported by the server application
+paths:
+  /clerks:
+    get:
+      operationId: pass
+      summary: "Get an array of clerks"
+      responses:
+        200:
+          description: "A JSON array of clerks"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Clerk'
+    post:
+      operationId: pass1
+      summary: "Add new clerk"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Clerk"
+      responses:
+        201:
+          description: "Clerk successfully added"
+  /clerks/{id}:
+    get:
+      summary: "Get specific clerk"
+      parameters: 
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: "Numeric id of the clerk"
+      responses:
+        200:
+          description: "Here is your clerk"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Clerk"
+        404:
+          description: "Not Found. No such clerk."
+      
+    put:
+      summary: "Update specific clerk"
+      parameters: 
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: "Numeric id of the clerk"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Clerk"
+      responses:
+        200:
+          description: "Successfully updated clerk"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Clerk"
+        400:
+          description: "Bad request. Check provided parameters."
+        404:
+          description: "Not Found. No such clerk."
+          
+    delete:
+      summary: "Delete specific clerk"
+      parameters: 
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: "Numeric id of the clerk"
+      responses:
+        200:
+          description: "Successfully deleted clerk"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Clerk"
+        404:
+          description: "Not Found. No such clerk."
+components:
+  schemas:
+    Clerk:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+      required:
+        - id
+        - name
