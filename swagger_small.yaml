@@ -30,16 +30,20 @@ paths:
       responses:
         201:
           description: "Clerk successfully added"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Clerk'
 
 components:
   schemas:
     Clerk:
       type: object
       properties:
-        id:
+        clerk_id:
           type: integer
         name:
           type: string
       required:
-        - id
+        - clerk_id
         - name

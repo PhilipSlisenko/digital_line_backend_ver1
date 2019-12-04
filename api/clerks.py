@@ -1,15 +1,38 @@
-import sys
-from test import test1 as test
 from connexion import request
 from config import db
-from models import Clerk
+from models import Clerk, ClerkSchema
+from flask import abort
+
+# request.args
 
 
-def search(qparam):
-    print(f"{qparam=}")
-    print(request.args)
+def search():
+    clerks = Clerk.query.all()
+    clerk_schema = ClerkSchema(multiple=True)
+    return clerk_schema.dump(clerks).data, 200
 
 
 def post():
-    print(request.data)
-    # new_clerk = Clerk(name=request.)
+    print(request.get_json())
+    clerk = Clerk.query \
+        .filter(Clerk.clerk_id == request.data.clerk_id) \
+        .first()
+    if clerk is not None:
+        abort(409, "Clerk with id {} already exists".format(request.data.clerk_id))
+
+    new_clerk = Clerk(name=request.data.name)
+    db.session.add(new_clerk)
+    db.session.commit()
+
+    clerk_schema = ClerkSchema()
+    return clerk_schema.dump(new_clerk).data, 201
+
+
+def get(clerk_id):
+    clerk = Clerk.query.filter(Clerk.clerk_id == clerk_id).first()
+
+    if not clerk:
+        abort(404, "Clerk with id {} was not found".format(clerk_id))
+
+    clerk_schema = ClerkSchema()
+    return clerk_schema.dump(clerk).data, 200

@@ -1,8 +1,10 @@
 from config import db
+from config import ma
+print('models were touched')
 
 
 class Line(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
+    line_id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80), nullable=False)
     clerks = db.relationship('Clerk', secondary='line_clerk', backref='lines')
     clients = db.relationship(
@@ -13,7 +15,7 @@ class Line(db.Model):
 
 
 class Clerk(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
+    clerk_id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80), nullable=False)
 
     def __repr__(self):
@@ -21,7 +23,7 @@ class Clerk(db.Model):
 
 
 class Client(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
+    client_id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80), nullable=False)
 
     def __repr__(self):
@@ -30,17 +32,26 @@ class Client(db.Model):
 
 line_clerk = db.Table('line_clerk',
                       db.Column('line_id', db.Integer,
-                                db.ForeignKey('line.id')),
+                                db.ForeignKey('line.line_id')),
                       db.Column('clerk_id', db.Integer,
-                                db.ForeignKey('clerk.id'))
+                                db.ForeignKey('clerk.clerk_id'))
                       )
 
 line_client = db.Table('line_client',
                        db.Column('line_id', db.Integer,
-                                 db.ForeignKey('line.id')),
+                                 db.ForeignKey('line.line_id')),
                        db.Column('client_id', db.Integer,
-                                 db.ForeignKey('client.id'))
+                                 db.ForeignKey('client.client_id'))
                        )
+
+
+class ClerkSchema(ma.ModelSchema):
+    class Meta:
+        model = Clerk
+        sqla_session = db.session
+
+
+db.create_all()
 
 # class Client():
 #     def __init__(self, id: str):
