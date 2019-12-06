@@ -5,6 +5,49 @@ info:
 
 # Paths supported by the server application
 paths:
+  /lines:
+    get:
+      #operationId: api.lines.search
+      summary: "Get an array of lines"
+      responses:
+        200:
+          description: "A JSON array of lines"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Line'
+    post:
+      #operationId: api.lines.post
+      summary: "Add new line"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Line"
+      responses:
+        201:
+          description: "Line successfully added"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Line'
+  /lines/{line_id}:
+    get:
+      parameters:
+        - in: path
+          name: line_id
+          schema:            
+            type: integer
+      responses:
+        200:
+          description: "Ok"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Line"
   /clerks:
     get:
       #operationId: api.clerks.search
@@ -34,9 +77,118 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Clerk'
+  /clerks/{clerk_id}:
+    get:
+      parameters:
+        - in: path
+          name: clerk_id
+          schema:            
+            type: integer
+      responses:
+        200:
+          description: "Ok"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Clerk"
+  /clients:
+    get:
+      #operationId: api.clients.search
+      summary: "Get an array of clients"
+      responses:
+        200:
+          description: "A JSON array of clients"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Client'
+    post:
+      #operationId: api.clients.post
+      summary: "Add new client"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Client"
+      responses:
+        201:
+          description: "Client successfully added"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Client'
+  /clients/{client_id}:
+    get:
+      parameters:
+        - in: path
+          name: client_id
+          schema:            
+            type: integer
+      responses:
+        200:
+          description: "Ok"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Client"
+
+  /lines/{line_id}/clients/{client_id}:
+    post:
+      description: "Add client to line"
+      operationId: api.lines_manipulations.add_client_to_line
+      parameters:
+        - in: path
+          name: line_id
+          schema:
+            type: integer
+        - in: path
+          name: client_id
+          schema:
+            type: integer
+      responses:
+        200:
+          description: "Ok"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Line"
+  /lines/{line_id}/clerks/{clerk_id}:
+    post:
+      description: "Add clerk to line"
+      operationId: api.lines_manipulations.add_clerk_to_line
+      parameters:
+        - in: path
+          name: line_id
+          schema:
+            type: integer
+        - in: path
+          name: clerk_id
+          schema:
+            type: integer
+      responses:
+        200:
+          description: "Ok"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Line"
+
 
 components:
   schemas:
+    Line:
+      type: object
+      properties:
+        line_id:
+          type: integer
+        name:
+          type: string
+      required:
+        - line_id
+        - name
     Clerk:
       type: object
       properties:
@@ -46,4 +198,14 @@ components:
           type: string
       required:
         - clerk_id
+        - name
+    Client:
+      type: object
+      properties:
+        client_id:
+          type: integer
+        name:
+          type: string
+      required:
+        - client_id
         - name

@@ -45,9 +45,21 @@ line_client = db.Table('line_client',
                        )
 
 
+class LineSchema(ma.ModelSchema):
+    class Meta:
+        model = Line
+        sqla_session = db.session
+
+
 class ClerkSchema(ma.ModelSchema):
     class Meta:
         model = Clerk
+        sqla_session = db.session
+
+
+class ClientSchema(ma.ModelSchema):
+    class Meta:
+        model = Client
         sqla_session = db.session
 
 
