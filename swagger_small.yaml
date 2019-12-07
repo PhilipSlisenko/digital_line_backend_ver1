@@ -9,6 +9,8 @@ paths:
     get:
       #operationId: api.lines.search
       summary: "Get an array of lines"
+      tags:
+        - lines
       responses:
         200:
           description: "A JSON array of lines"
@@ -21,6 +23,8 @@ paths:
     post:
       #operationId: api.lines.post
       summary: "Add new line"
+      tags:
+        - lines
       requestBody:
         required: true
         content:
@@ -36,6 +40,8 @@ paths:
                 $ref: '#/components/schemas/Line'
   /lines/{line_id}:
     get:
+      tags:
+        - lines
       parameters:
         - in: path
           name: line_id
@@ -52,6 +58,8 @@ paths:
     get:
       #operationId: api.clerks.search
       summary: "Get an array of clerks"
+      tags:
+        - clerks
       responses:
         200:
           description: "A JSON array of clerks"
@@ -64,6 +72,8 @@ paths:
     post:
       #operationId: api.clerks.post
       summary: "Add new clerk"
+      tags:
+        - clerks
       requestBody:
         required: true
         content:
@@ -79,6 +89,8 @@ paths:
                 $ref: '#/components/schemas/Clerk'
   /clerks/{clerk_id}:
     get:
+      tags:
+        - clerks
       parameters:
         - in: path
           name: clerk_id
@@ -95,6 +107,8 @@ paths:
     get:
       #operationId: api.clients.search
       summary: "Get an array of clients"
+      tags:
+        - clients
       responses:
         200:
           description: "A JSON array of clients"
@@ -107,6 +121,8 @@ paths:
     post:
       #operationId: api.clients.post
       summary: "Add new client"
+      tags:
+        - clients
       requestBody:
         required: true
         content:
@@ -122,6 +138,8 @@ paths:
                 $ref: '#/components/schemas/Client'
   /clients/{client_id}:
     get:
+      tags:
+        - clients
       parameters:
         - in: path
           name: client_id
@@ -137,8 +155,10 @@ paths:
 
   /lines/{line_id}/clients/{client_id}:
     post:
-      description: "Add client to line"
       operationId: api.lines_manipulations.add_client_to_line
+      description: "Add client to line"
+      tags:
+        - lines_manipulations
       parameters:
         - in: path
           name: line_id
@@ -155,10 +175,13 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Line"
+  
   /lines/{line_id}/clerks/{clerk_id}:
     post:
-      description: "Add clerk to line"
       operationId: api.lines_manipulations.add_clerk_to_line
+      description: "Add clerk to line"
+      tags:
+        - lines_manipulations
       parameters:
         - in: path
           name: line_id

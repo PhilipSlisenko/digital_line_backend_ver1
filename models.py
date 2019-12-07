@@ -8,7 +8,14 @@ class Line(db.Model):
     name = db.Column(db.String(80), nullable=False)
     clerks = db.relationship('Clerk', secondary='line_clerk', backref='lines')
     clients = db.relationship(
-        'Client', secondary='line_client', backref='lines')
+        'Client', secondary='line_client_link', backref='lines')
+    # how many people in particular line
+    people_in_line = db.Column(db.Integer, default=0)
+    # each client has their number, which determines place in line
+    # number to give to a new client in line
+    number_for_new_client = db.Column(db.Integer, default=1)
+    # number of client who will be served next
+    next_client_to_serve = db.Column(db.Integer, default=0)
 
     def __repr__(self):
         return '<Line {}>'.format(self.name)
@@ -37,12 +44,22 @@ line_clerk = db.Table('line_clerk',
                                 db.ForeignKey('clerk.clerk_id'))
                       )
 
-line_client = db.Table('line_client',
-                       db.Column('line_id', db.Integer,
-                                 db.ForeignKey('line.line_id')),
-                       db.Column('client_id', db.Integer,
-                                 db.ForeignKey('client.client_id'))
-                       )
+
+class LineClientLink(db.Model):
+    line_id = db.Column(db.Integer, db.ForeignKey(
+        'line.line_id'), primary_key=True)
+    client_id = db.Column(db.Integer, db.ForeignKey(
+        'client.client_id'), primary_key=True)
+    client_place_in_line = db.Column(db.Integer)
+
+
+# line_client = db.Table('line_client',
+#                        db.Column('line_id', db.Integer,
+#                                  db.ForeignKey('line.line_id')),
+#                        db.Column('client_id', db.Integer,
+#                                  db.ForeignKey('client.client_id')),
+#                        db.Column('client_place_in_line', db.Integer)
+#                        )
 
 
 class LineSchema(ma.ModelSchema):
