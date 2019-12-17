@@ -37,3 +37,10 @@ def get(line_id):
 
     line_schema = LineSchema()
     return line_schema.dump(line).data, 200
+
+
+def delete(line_id: int) -> None:
+    line = Line.query.filter(Line.line_id == line_id).first()
+
+    db.session.delete(line)
+    db.session.commit()
